@@ -1,12 +1,21 @@
+import path from 'node:path';
+
+const resolveAsyncStorage = () => {
+  try {
+    return new URL('./lib/base/asyncStorageShim.ts', import.meta.url).pathname;
+  } catch {
+    return new URL('./lib/base/asyncStorageShim.ts', import.meta.url).pathname;
+  }
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { isServer }) => {
+    const asyncStoragePath = resolveAsyncStorage();
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@react-native-async-storage/async-storage": require.resolve(
-        "./lib/base/asyncStorageShim.ts"
-      ),
+      "@react-native-async-storage/async-storage": asyncStoragePath,
     };
 
     if (!isServer) {
