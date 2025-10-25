@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_20-c32b2cfb6bf4574894107e514d0a2cd1946938cb",
+  "solcVersion": "0.8.20",
+  "solcLongVersion": "0.8.20+commit.a1b79de6",
+  "userSourceNameMap": {
+    "contracts/BaseBatches.sol": "project/contracts/BaseBatches.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "shanghai",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/BaseBatches.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\n/**\n * @title BaseBatches\n * @notice Minimal contract to mirror the pack purchase and staking flow on Base.\n */\ncontract BaseBatches {\n    enum PackTier {\n        Bronze,\n        Silver,\n        Gold\n    }\n\n    struct Team {\n        uint256 teamId;\n        address owner;\n        PackTier tier;\n        bool staked;\n        uint256 createdAt;\n        uint256 updatedAt;\n    }\n\n    address public owner;\n    uint256 public nextTeamId;\n    mapping(address => uint256[]) private _userTeamIds;\n    mapping(uint256 => Team) private _teams;\n    mapping(PackTier => uint256) public packPrices;\n\n    event PackPurchased(address indexed buyer, uint256 indexed teamId, PackTier tier, uint256 valuePaid);\n    event TeamStakeUpdated(address indexed owner, uint256 indexed teamId, bool staked);\n    event PackPriceUpdated(PackTier indexed tier, uint256 price);\n    event Withdraw(address indexed to, uint256 amount);\n\n    modifier onlyOwner() {\n        require(msg.sender == owner, \"Only owner\");\n        _;\n    }\n\n    constructor() {\n        owner = msg.sender;\n        packPrices[PackTier.Bronze] = 0.0005 ether;\n        packPrices[PackTier.Silver] = 0.001 ether;\n        packPrices[PackTier.Gold] = 0.002 ether;\n    }\n\n    function buyPack(PackTier tier) external payable returns (uint256 teamId) {\n        uint256 price = packPrices[tier];\n        require(msg.value >= price, \"Insufficient payment\");\n\n        teamId = ++nextTeamId;\n        _teams[teamId] = Team({\n            teamId: teamId,\n            owner: msg.sender,\n            tier: tier,\n            staked: false,\n            createdAt: block.timestamp,\n            updatedAt: block.timestamp\n        });\n        _userTeamIds[msg.sender].push(teamId);\n\n        emit PackPurchased(msg.sender, teamId, tier, msg.value);\n    }\n\n    function getUserTeams(address user) external view returns (Team[] memory teams) {\n        uint256[] storage ids = _userTeamIds[user];\n        teams = new Team[](ids.length);\n        for (uint256 i = 0; i < ids.length; i++) {\n            teams[i] = _teams[ids[i]];\n        }\n    }\n\n    function getTeam(uint256 teamId) external view returns (Team memory) {\n        return _teams[teamId];\n    }\n\n    function setTeamStake(uint256 teamId, bool staked) external {\n        Team storage team = _teams[teamId];\n        require(team.owner == msg.sender, \"Not team owner\");\n        team.staked = staked;\n        team.updatedAt = block.timestamp;\n        emit TeamStakeUpdated(msg.sender, teamId, staked);\n    }\n\n    function updatePackPrice(PackTier tier, uint256 newPrice) external onlyOwner {\n        packPrices[tier] = newPrice;\n        emit PackPriceUpdated(tier, newPrice);\n    }\n\n    function withdraw(address payable to, uint256 amount) external onlyOwner {\n        require(amount <= address(this).balance, \"Amount exceeds balance\");\n        to.transfer(amount);\n        emit Withdraw(to, amount);\n    }\n\n    function transferOwnership(address newOwner) external onlyOwner {\n        require(newOwner != address(0), \"Zero address\");\n        owner = newOwner;\n    }\n\n    function getPackPrices() external view returns (uint256 bronze, uint256 silver, uint256 gold) {\n        bronze = packPrices[PackTier.Bronze];\n        silver = packPrices[PackTier.Silver];\n        gold = packPrices[PackTier.Gold];\n    }\n\n    function getUserTeamIds(address user) external view returns (uint256[] memory) {\n        return _userTeamIds[user];\n    }\n}\n"
+      }
+    }
+  }
+}
