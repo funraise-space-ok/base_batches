@@ -1,8 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Container, Stack } from "@mui/material";
 import { BuyTeam } from "components/BuyTeam";
-import { BaseAccountWidget } from "components/BaseAccount";
+
+const BaseAccountWidget = dynamic(
+  () =>
+    import("components/BaseAccount").then((mod) => mod.BaseAccountWidget),
+  { ssr: false },
+);
 
 export default function BuyPackPage() {
   return (
