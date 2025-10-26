@@ -13,6 +13,8 @@ type Player = {
   image: string;  // http(s):// o ipfs://
   type: string;   // "gold" | "silver" | "bronze" | ...
   country: string;// no se muestra
+  fallbackImage?: string;
+  placeholderImage?: string;
 };
 
 type Props = {
@@ -55,10 +57,6 @@ function PackOpeningAnimation({
   ipfsGateway = "https://cloudflare-ipfs.com/ipfs/",
   packImageSrc = "/booster_pack.png",
 }: Props) {
-  console.log('[PackOpeningAnimation] Props recibidas:', { 
-    players: players?.map(p => ({ id: p.id, name: p.name, image: p.image, type: p.type })),
-    playersCount: players?.length 
-  });
   // visibilidad interna
   const [internalOpen, setInternalOpen] = useState(false);
   useEffect(() => {
@@ -116,6 +114,29 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
     timeoutsRef.current.push(id as unknown as number);
     return id;
   };
+
+  // Precargar imágenes de jugadores
+  useEffect(() => {
+    if (!players || players.length === 0) return;
+    
+    players.forEach((player) => {
+      // Precargar imagen principal
+      if (player.image && (player.image.startsWith('/') || player.image.startsWith('http'))) {
+        const img = new window.Image();
+        img.src = player.image;
+      }
+      // Precargar fallback
+      if (player.fallbackImage && (player.fallbackImage.startsWith('/') || player.fallbackImage.startsWith('http'))) {
+        const img = new window.Image();
+        img.src = player.fallbackImage;
+      }
+      // Precargar placeholder
+      if (player.placeholderImage && (player.placeholderImage.startsWith('/') || player.placeholderImage.startsWith('http'))) {
+        const img = new window.Image();
+        img.src = player.placeholderImage;
+      }
+    });
+  }, [players]);
 
   // FLAG: apertura sólo una vez por sesión
   const startedRef = useRef(false);
@@ -185,16 +206,11 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
 
   // 5 cartas ordenadas por rareza (oro, plata, bronce)
   const five: Player[] = useMemo(() => {
-    const a = (players||[]).slice(0,5);
-    while (a.length < 5) a.push({ id: -1000-a.length, name:"", image:"", type:"silver", country:"" });
-    
-    // Ordenar por rareza: oro primero, luego plata, luego bronce
-    return a.sort((a, b) => {
-      const rarityOrder = { gold: 0, silver: 1, bronze: 2 };
-      const aRarity = rarityOrder[a.type.toLowerCase() as keyof typeof rarityOrder] ?? 3;
-      const bRarity = rarityOrder[b.type.toLowerCase() as keyof typeof rarityOrder] ?? 3;
-      return aRarity - bRarity;
+    const sorted = [...players].sort((a, b) => {
+      const order: Record<string, number> = { gold: 0, silver: 1, bronze: 2 };
+      return (order[a.type?.toLowerCase() ?? ''] ?? 3) - (order[b.type?.toLowerCase() ?? ''] ?? 3);
     });
+    return sorted.slice(0, 5);
   }, [players]);
 
   // Preload de imágenes de cartas (top 5) cuando se abre
@@ -508,7 +524,7 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
         // No intentar cambiar src ya que puede estar protegido
         audioRef.current = null;
       } catch (e) {
-        console.log('Error deteniendo audio:', e);
+        // Error deteniendo audio (ignorado)
       }
     }
     if (goalAudioRef.current) {
@@ -797,7 +813,9 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                     gap={GAP}
                     landed={false}
                     packImg={packImageSrc}
-                    cardImg={getLocalPlayerImageByName(p?.name || '')}
+                    cardImg={p?.image || getLocalPlayerImageByName(p?.name || '')}
+                    fallbackImg={p?.fallbackImage}
+                    placeholderImg={p?.placeholderImage}
                     bg={rarityBg(p?.type || '')}
                     beatOn={false}
                     beatSeed={`${i}-${beatSeed}`}
@@ -835,7 +853,9 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                     <Card
                       w={CARD_W}
                       h={CARD_H}
-                      img={getLocalPlayerImageByName(p?.name || '')}
+                      img={p?.image || getLocalPlayerImageByName(p?.name || '')}
+                      fallbackImg={p?.fallbackImage}
+                      placeholderImg={p?.placeholderImage}
                       beatOn={false}
                       beatSeed={''}
                       bg={rarityBg(p?.type || '')}
@@ -869,7 +889,9 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                     <Card
                       w={CARD_W}
                       h={CARD_H}
-                      img={getLocalPlayerImageByName(p?.name || '')}
+                      img={p?.image || getLocalPlayerImageByName(p?.name || '')}
+                      fallbackImg={p?.fallbackImage}
+                      placeholderImg={p?.placeholderImage}
                       beatOn={false}
                       beatSeed={''}
                       bg={rarityBg(p?.type || '')}
@@ -1005,11 +1027,11 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
 
 /* ---------- SlotReveal: sobre → carta + partículas ---------- */
 function SlotReveal({
-  index, revealed, cardW, cardH, beatOn, beatSeed, bg, cardImg, packImg, onZoom, rarity
+  index, revealed, cardW, cardH, beatOn, beatSeed, bg, cardImg, fallbackImg, placeholderImg, packImg, onZoom, rarity
 }:{
   index: number;
   revealed: boolean; cardW:number; cardH:number; beatOn:boolean; beatSeed:string;
-  bg:string; cardImg:string; packImg:string; onZoom: (src:string)=>void; rarity?: string;
+  bg:string; cardImg:string; fallbackImg?: string; placeholderImg?: string; packImg:string; onZoom: (src:string)=>void; rarity?: string;
 }) {
   return (
     <div style={{ width: cardW, height: cardH, position: "relative" }}>
@@ -1064,6 +1086,8 @@ function SlotReveal({
               w={cardW}
               h={cardH}
               img={cardImg}
+              fallbackImg={fallbackImg}
+              placeholderImg={placeholderImg}
               beatOn={beatOn}
               beatSeed={beatSeed}
               bg={bg}
@@ -1139,8 +1163,8 @@ function PackPlaceholder({ w, h, img, beatOn }:{
 }
 
 /* ---------- Vuelo desde centro hacia slot y revelado ---------- */
-function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, bg, beatOn, beatSeed, onZoom, rarity }:{
-  x:number; y:number; cardW:number; cardH:number; gap:number; landed:boolean; packImg?:string; cardImg?:string; bg:string; beatOn:boolean; beatSeed:string; onZoom:(src:string)=>void; rarity?: string;
+function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, fallbackImg, placeholderImg, bg, beatOn, beatSeed, onZoom, rarity }:{
+  x:number; y:number; cardW:number; cardH:number; gap:number; landed:boolean; packImg?:string; cardImg?:string; fallbackImg?: string; placeholderImg?: string; bg:string; beatOn:boolean; beatSeed:string; onZoom:(src:string)=>void; rarity?: string;
 }) {
   const CENTER_W = cardW + 80;
   const CENTER_H = cardH + 80;
@@ -1171,8 +1195,22 @@ function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, bg,
                   pointerEvents: 'none'
                 }}
               >
-                <div style={{ position: 'relative', width: cardW*2.6, height: cardH*2.6 }}>
-                  <Image src={cardImg || ''} alt="zoom-card" fill style={{ objectFit: 'contain' }} unoptimized />
+                <div style={{ position: 'relative', width: cardW * 2.6, height: cardH * 2.6 }}>
+                  <Card
+                    w={cardW * 2.6}
+                    h={cardH * 2.6}
+                    img={cardImg || ''}
+                    fallbackImg={fallbackImg}
+                    placeholderImg={placeholderImg}
+                    beatOn={false}
+                    beatSeed={beatSeed}
+                    bg={bg}
+                    revealSeed={`zoom-${x}-${y}`}
+                    onZoom={onZoom}
+                    rarity={rarity}
+                    showIntroGlow={false}
+                    staticMode
+                  />
                 </div>
               </motion.div>
             )}
@@ -1186,6 +1224,8 @@ function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, bg,
               w={cardW}
               h={cardH}
               img={cardImg || ''}
+              fallbackImg={fallbackImg}
+              placeholderImg={placeholderImg}
               beatOn={beatOn}
               beatSeed={beatSeed}
               bg={bg}
@@ -1224,19 +1264,81 @@ function getSlotPosition(i:number, CARD_W:number, CARD_H:number, GAP:number) {
 
 /* ---------- Carta (sin textos) + partículas y ZOOM ---------- */
 function Card({
-  w, h, img, beatOn, beatSeed, bg, revealSeed, onZoom, rarity, showIntroGlow = true, staticMode = false
+  w, h, img, fallbackImg, placeholderImg, beatOn, beatSeed, bg, revealSeed, onZoom, rarity, showIntroGlow = true, staticMode = false
 }:{
-  w:number; h:number; img:string; beatOn:boolean; beatSeed:string; bg:string; revealSeed: string;
+  w:number; h:number; img:string; fallbackImg?: string; placeholderImg?: string; beatOn:boolean; beatSeed:string; bg:string; revealSeed: string;
   onZoom: (src:string)=>void; rarity?: string; showIntroGlow?: boolean; staticMode?: boolean;
 }) {
-  console.log(`[Card Component] Renderizando carta con img src: '${img}'`);
-  const [fallbackPng, setFallbackPng] = useState(false);
   const SAFE_PAD = 8;
-  const displaySrc = useMemo(() => {
-    if (!img) return img;
-    if (fallbackPng) return img.replace(/\.webp$/i, '.png');
-    return img;
-  }, [img, fallbackPng]);
+
+  const fallbackDefault = useMemo(() => getLocalPlayerImageByName(''), []);
+  const candidates = useMemo(() => {
+    const list: string[] = [];
+    const push = (src?: string) => {
+      if (!src) return;
+      if (!list.includes(src)) list.push(src);
+    };
+    const addWithVariants = (src?: string) => {
+      if (!src) return;
+      // Si es PNG en /pls/, probar WEBP primero
+      if (src.startsWith('/pls/') && src.toLowerCase().endsWith('.png')) {
+        push(src.replace(/\.png$/iu, '.webp'));
+        push(src);
+      } else {
+        push(src);
+      }
+    };
+
+    const placeholderVariant = placeholderImg || fallbackDefault;
+    const localIsDistinct = Boolean(img && placeholderImg && img !== placeholderImg);
+
+    if (localIsDistinct) {
+      addWithVariants(img);
+    }
+
+    if (fallbackImg) {
+      addWithVariants(fallbackImg);
+    }
+
+    if (!localIsDistinct && img) {
+      addWithVariants(img);
+    }
+
+    addWithVariants(placeholderVariant);
+    if (placeholderVariant !== fallbackDefault) {
+      addWithVariants(fallbackDefault);
+    }
+    return list;
+  }, [img, fallbackImg, placeholderImg, fallbackDefault]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const candidatesKey = useMemo(() => candidates.join('|'), [candidates]);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+    setImageError(false);
+    // Si la primera imagen candidata es local, considerarla ya cargada
+    const firstCandidate = candidates[0] || '';
+    setImageLoaded(firstCandidate.startsWith('/'));
+  }, [candidatesKey, candidates]);
+
+  const currentSrc = candidates[currentIndex] || fallbackDefault;
+  const isRemote = Boolean(currentSrc && !currentSrc.startsWith('/') && !currentSrc.startsWith('data:'));
+
+  const handleImageError = () => {
+    if (currentIndex < candidates.length - 1) {
+      const nextIndex = currentIndex + 1;
+      const nextCandidate = candidates[nextIndex] || '';
+      setCurrentIndex(nextIndex);
+      // Si la siguiente imagen es local, considerarla cargada inmediatamente
+      setImageLoaded(nextCandidate.startsWith('/'));
+      return;
+    }
+    setImageError(true);
+  };
 
   if (staticMode) {
     return (
@@ -1248,32 +1350,30 @@ function Card({
           boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
           backgroundImage: bg,
           border: "1px solid rgba(255,255,255,0.1)",
-          cursor: img ? "zoom-in" : "default",
+          cursor: currentSrc ? "zoom-in" : "default",
+          backgroundColor: imageError ? '#8B4513' : 'transparent',
         }}
-        onClick={() => img && onZoom(img)}
+        onClick={() => currentSrc && onZoom(fallbackImg || placeholderImg || currentSrc)}
       >
-        {img && (
+        {currentSrc && (
           <img
-            src={displaySrc}
+            src={currentSrc}
             alt="player"
             referrerPolicy="no-referrer"
+            loading="eager"
+            decoding="async"
             style={{
               position:"absolute",
               left: SAFE_PAD, right: SAFE_PAD, top: SAFE_PAD, bottom: SAFE_PAD,
               width: `calc(100% - ${SAFE_PAD*2}px)`,
               height: `calc(100% - ${SAFE_PAD*2}px)`,
               objectFit:"contain",
-              opacity: 0.98,
+              opacity: imageLoaded || imageError ? 0.98 : 0,
+              transition: 'opacity 0.2s ease-out',
               display: "block",
             }}
-            onError={(e)=>{ 
-              console.warn('Error cargando imagen:', displaySrc);
-              if (!fallbackPng && /\.webp$/i.test(displaySrc)) {
-                setFallbackPng(true);
-              } else {
-                (e.currentTarget as HTMLImageElement).style.display="none"; 
-              }
-            }}
+            onLoad={() => setImageLoaded(true)}
+            onError={handleImageError}
           />
         )}
       </div>
@@ -1301,9 +1401,10 @@ function Card({
         boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
         backgroundImage: bg,
         border: "1px solid rgba(255,255,255,0.1)",
-        cursor: img ? "zoom-in" : "default",
+        cursor: currentSrc ? "zoom-in" : "default",
+        backgroundColor: imageError ? '#8B4513' : 'transparent',
       }}
-      onClick={() => img && onZoom(img)}
+      onClick={() => currentSrc && onZoom(fallbackImg || placeholderImg || currentSrc)}
     >
       {/* Brillo diagonal metálico (más intenso) */}
       <div
@@ -1328,35 +1429,10 @@ function Card({
           boxShadow: '0 0 18px rgba(255,255,255,0.28)'
         }}
       />
-      {/* Sin anillo adicional */}
-      {/* 1) fondo borroso de relleno */}
-      {img && (
-        <img
-          src={displaySrc}
-          alt="bg-fill"
-          referrerPolicy="no-referrer"
-          style={{
-            position:"absolute", inset:0, width:"100%", height:"100%",
-            objectFit:"cover",
-            filter:"blur(12px) brightness(0.9) saturate(1.05)",
-            transform:"scale(1.08)",
-            opacity:0.40,
-            pointerEvents:"none",
-          }}
-          onError={(e)=>{ 
-            if (!fallbackPng && /\.webp$/i.test(displaySrc)) {
-              setFallbackPng(true);
-            } else {
-              (e.currentTarget as HTMLImageElement).style.display="none";
-            }
-          }}
-        />
-      )}
-
       {/* 2) imagen principal SIN recorte */}
-      {img && (
+      {currentSrc && (
         <img
-          src={displaySrc}
+          src={currentSrc}
           alt="player"
           referrerPolicy="no-referrer"
           loading="eager"
@@ -1367,19 +1443,12 @@ function Card({
             width: `calc(100% - ${SAFE_PAD*2}px)`,
             height: `calc(100% - ${SAFE_PAD*2}px)`,
             objectFit:"contain",
-            opacity: 0.98,
+            opacity: imageLoaded || imageError ? 0.98 : 0,
+            transition: imageLoaded ? 'opacity 0.2s ease-out' : 'none',
             display: "block",
           }}
-          onLoad={(e) => {
-            (e.currentTarget as HTMLImageElement).style.opacity = "0.98";
-          }}
-          onError={(e)=>{ 
-            // Evitar ocultar por completo; dejamos estático aunque no cargue
-            console.warn('Error cargando imagen:', displaySrc);
-            if (!fallbackPng && /\.webp$/i.test(displaySrc)) {
-              setFallbackPng(true);
-            }
-          }}
+          onLoad={() => setImageLoaded(true)}
+          onError={handleImageError}
         />
       )}
 

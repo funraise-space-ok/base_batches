@@ -5,8 +5,7 @@ import { Container, Stack } from "@mui/material";
 import { BuyTeam } from "components/BuyTeam";
 
 const BaseAccountWidget = dynamic(
-  () =>
-    import("components/BaseAccount").then((mod) => mod.BaseAccountWidget),
+  () => import("components/BaseAccount").then((mod) => mod.BaseAccountWidget),
   { ssr: false },
 );
 

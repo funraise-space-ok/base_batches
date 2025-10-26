@@ -8,9 +8,9 @@ import {
   styled,
   SxProps,
 } from "@mui/material";
-import { ReactNode, useState, useMemo } from "react";
+import { ReactNode, useState, useMemo, useEffect } from "react";
 import Image from "next/image";
-import { getLocalPlayerImageByName } from "../../lib/utils";
+import { getLocalPlayerImageByName, normalizePlayerImageSources } from "../../lib/utils";
 import { type Card } from "types/card";
 
 interface Props extends Card {
@@ -312,35 +312,79 @@ const bronzeSparkleShapes = [
   </svg>,
 ];
 
-const CardWithImageFallback = ({ image, children, hiRes = false }: { image: string, children: ReactNode, hiRes?: boolean }) => {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const [preferPng, setPreferPng] = useState(false);
+const CardWithImageFallback = ({ image, name, children, hiRes = false }: { image: string; name?: string; children: ReactNode; hiRes?: boolean }) => {
+  const { local, remote, placeholder } = useMemo(
+    () => normalizePlayerImageSources(image, name),
+    [image, name],
+  );
+  const defaultFallback = useMemo(() => placeholder || getLocalPlayerImageByName(""), [placeholder]);
 
-  const imageUrl = useMemo(() => {
-    if (imageError && retryCount >= 2) {
-      return getLocalPlayerImageByName('');
+  const candidates = useMemo(() => {
+    const list: string[] = [];
+    const push = (src?: string) => {
+      if (!src) return;
+      if (!list.includes(src)) list.push(src);
+    };
+    const pushLocal = (src?: string) => {
+      if (!src) return;
+      // Si es PNG en /pls/, probar WEBP primero
+      if (src.startsWith("/pls/") && src.toLowerCase().endsWith(".png")) {
+        const webpVersion = src.replace(/\.png$/iu, ".webp");
+        push(webpVersion);
+        push(src);
+      } else {
+        push(src);
+      }
+    };
+
+    const placeholderVariant = placeholder || defaultFallback;
+    const localIsDistinct = Boolean(local && placeholderVariant && local !== placeholderVariant);
+
+    if (localIsDistinct) {
+      pushLocal(local);
     }
-    const pngUrl = getLocalPlayerImageByName(image);
-    if (preferPng) return pngUrl;
-    // Intentar WebP primero, luego caer a PNG si falla
-    return pngUrl.replace(/\.png$/i, '.webp');
-  }, [image, imageError, retryCount, preferPng]);
+
+    if (remote) {
+      if (remote.startsWith("/pls/")) {
+        pushLocal(remote);
+      } else {
+        push(remote);
+      }
+    }
+
+    if (!localIsDistinct && local) {
+      pushLocal(local);
+    }
+
+    pushLocal(placeholderVariant);
+    if (placeholderVariant !== defaultFallback) {
+      push(defaultFallback);
+    }
+    return list;
+  }, [local, remote, placeholder, defaultFallback]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
+  const candidatesKey = useMemo(() => candidates.join("|"), [candidates]);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+    setImageLoaded(false);
+    setImageError(false);
+  }, [candidatesKey]);
+
+  const displaySrc = candidates[currentIndex];
+  const isRemote = Boolean(displaySrc && !displaySrc.startsWith("/") && !displaySrc.startsWith("data:"));
 
   const handleImageError = () => {
-    // Si falló WebP, probar PNG una vez
-    if (!preferPng) {
-      setPreferPng(true);
+    if (currentIndex < candidates.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+      setImageLoaded(false);
       return;
     }
-    if (retryCount < 2) {
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-      }, 1000 * (retryCount + 1));
-    } else {
-      setImageError(true);
-    }
+    setImageError(true);
   };
 
   return (
@@ -353,10 +397,10 @@ const CardWithImageFallback = ({ image, children, hiRes = false }: { image: stri
           overflow: 'hidden'
         }}
       >
-        {!imageError && (
+        {!imageError && displaySrc && (
           <Image
-            key={`${imageUrl}-${retryCount}`}
-            src={imageUrl}
+            key={`${displaySrc}-${currentIndex}`}
+            src={displaySrc}
             alt=""
             fill
             sizes={hiRes ? "(max-width: 1200px) 600px, 720px" : "200px"}
@@ -364,9 +408,9 @@ const CardWithImageFallback = ({ image, children, hiRes = false }: { image: stri
             onLoad={() => setImageLoaded(true)}
             onError={handleImageError}
             priority={hiRes}
-            unoptimized={false}
-          />)
-        }
+            unoptimized={isRemote}
+          />
+        )}
         {children}
       </CardImage>
     </>
@@ -479,7 +523,7 @@ export function Card({
     }
   }
   const cardContents = (
-    <CardWithImageFallback image={image}>
+    <CardWithImageFallback image={image} name={name}>
       {/* Frame desactivado para evitar doble imagen/overlay */}
       {/* Datos visuales extra removidos para vista compacta al click */}
       <CardShine className="shine" type={type} />
@@ -506,7 +550,7 @@ export function Card({
           <DialogContent sx={{ backgroundColor: "transparent", padding: 0, border: "none" }}>
             <CardStyled type={type} sx={{ width: 420, height: 672 }}>
               {/* Solo imagen dentro del modal */}
-              <CardWithImageFallback image={image} hiRes>
+              <CardWithImageFallback image={image} name={name} hiRes>
                 <CardFoil />
               </CardWithImageFallback>
             </CardStyled>

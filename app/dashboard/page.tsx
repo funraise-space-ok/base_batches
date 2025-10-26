@@ -98,6 +98,65 @@ export default function DashboardPage() {
           <Chip label={`Equipos en stake: ${stakedCount}`} color="secondary" />
         </Stack>
       </Stack>
+      <Card
+        sx={{
+          mb: 4,
+          borderRadius: 5,
+          overflow: "hidden",
+          position: "relative",
+          background: (theme) =>
+            theme.palette.mode === "dark"
+              ? "linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,64,175,0.95) 100%)"
+              : "linear-gradient(135deg, rgba(236,254,255,0.95) 0%, rgba(165,243,252,0.95) 100%)",
+        }}
+      >
+        <CardContent sx={{ position: "relative", zIndex: 1 }}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} md={8}>
+              <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                Todo centralizado en Base
+              </Typography>
+              <Typography variant="body1" sx={{ opacity: 0.8, maxWidth: 520 }}>
+                Visualiza tus equipos, actualiza su estado de staking y consulta los precios
+                on-chain en tiempo real. Cada interacción queda registrada en el contrato Sports.
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{ display: "flex", justifyContent: { xs: "flex-start", md: "flex-end" } }}
+            >
+              <Stack spacing={1}>
+                <Chip
+                  label={`Bronze · ${packPrices.A.formatted}`}
+                  variant="outlined"
+                  sx={{ borderColor: "rgba(255,255,255,0.4)", color: "inherit" }}
+                />
+                <Chip
+                  label={`Silver · ${packPrices.B.formatted}`}
+                  variant="outlined"
+                  sx={{ borderColor: "rgba(255,255,255,0.4)", color: "inherit" }}
+                />
+                <Chip
+                  label={`Gold · ${packPrices.C.formatted}`}
+                  variant="outlined"
+                  sx={{ borderColor: "rgba(255,255,255,0.4)", color: "inherit" }}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 45%)",
+            pointerEvents: "none",
+          }}
+        />
+      </Card>
 
       {!isConnected ? (
         <Alert severity="info">

@@ -1,0 +1,3712 @@
+{
+  "address": "FTMjvTiyNviVXUkEumWUA4s7SWuE37Bsvh9k5SFmQSR4",
+  "metadata": {
+    "name": "sports",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_staff_member",
+      "discriminator": [
+        66,
+        49,
+        138,
+        41,
+        91,
+        148,
+        221,
+        151
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "staff_member",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "add_tokens",
+      "discriminator": [
+        28,
+        218,
+        30,
+        209,
+        175,
+        155,
+        153,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "player_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "player_id",
+          "type": "u16"
+        },
+        {
+          "name": "tokens_to_add",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "buy_team",
+      "discriminator": [
+        214,
+        130,
+        38,
+        71,
+        24,
+        33,
+        31,
+        15
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state.next_team_id",
+                "account": "GameState"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_usdc_account",
+          "docs": [
+            "User's USDC token account (source)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_usdc_account",
+          "docs": [
+            "Program's USDC token account (destination/treasury)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_usdc_authority",
+          "docs": [
+            "PDA authority for program's USDC account"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  100,
+                  99,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "nft_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state.next_team_id",
+                "account": "GameState"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  11,
+                  112,
+                  101,
+                  177,
+                  227,
+                  209,
+                  124,
+                  69,
+                  56,
+                  157,
+                  82,
+                  127,
+                  107,
+                  4,
+                  195,
+                  205,
+                  88,
+                  184,
+                  108,
+                  115,
+                  26,
+                  160,
+                  253,
+                  181,
+                  73,
+                  182,
+                  209,
+                  188,
+                  3,
+                  248,
+                  41,
+                  70
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                11,
+                112,
+                101,
+                177,
+                227,
+                209,
+                124,
+                69,
+                56,
+                157,
+                82,
+                127,
+                107,
+                4,
+                195,
+                205,
+                88,
+                184,
+                108,
+                115,
+                26,
+                160,
+                253,
+                181,
+                73,
+                182,
+                209,
+                188,
+                3,
+                248,
+                41,
+                70
+              ]
+            }
+          }
+        },
+        {
+          "name": "user_nft_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "metadata_program"
+        },
+        {
+          "name": "update_authority"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "sol_usd_feed"
+        },
+        {
+          "name": "chainlink_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "package",
+          "type": {
+            "defined": {
+              "name": "TeamPackage"
+            }
+          }
+        },
+        {
+          "name": "terms_accepted",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "close_current_report",
+      "discriminator": [
+        219,
+        246,
+        68,
+        101,
+        233,
+        43,
+        155,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "report",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  112,
+                  111,
+                  114,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state.current_report_id",
+                "account": "GameState"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "revenue",
+          "type": "u64"
+        },
+        {
+          "name": "teams_sold",
+          "type": "u32"
+        },
+        {
+          "name": "tokens_sold",
+          "type": "u32"
+        },
+        {
+          "name": "staker_pool",
+          "type": "u64"
+        },
+        {
+          "name": "stakers_count",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "create_player",
+      "discriminator": [
+        19,
+        178,
+        189,
+        216,
+        159,
+        134,
+        0,
+        192
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state.next_player_id",
+                "account": "GameState"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "provider_id",
+          "type": "u16"
+        },
+        {
+          "name": "category",
+          "type": {
+            "defined": {
+              "name": "PlayerCategory"
+            }
+          }
+        },
+        {
+          "name": "total_tokens",
+          "type": "u32"
+        },
+        {
+          "name": "metadata_uri",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "discipline",
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "team_price_a",
+          "type": "u64"
+        },
+        {
+          "name": "team_price_b",
+          "type": "u64"
+        },
+        {
+          "name": "team_price_c",
+          "type": "u64"
+        },
+        {
+          "name": "mint_usdc",
+          "type": "pubkey"
+        },
+        {
+          "name": "nft_update_authority",
+          "type": "pubkey"
+        },
+        {
+          "name": "nft_image_url",
+          "type": "string"
+        },
+        {
+          "name": "time_lock",
+          "type": {
+            "option": "i64"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause",
+      "discriminator": [
+        211,
+        22,
+        221,
+        251,
+        74,
+        121,
+        193,
+        47
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "refresh_team_status",
+      "discriminator": [
+        131,
+        160,
+        125,
+        154,
+        19,
+        182,
+        176,
+        183
+      ],
+      "accounts": [
+        {
+          "name": "team_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "team_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "game_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "clock",
+          "docs": [
+            "Clock for timestamp"
+          ],
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "team_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "remove_staff_member",
+      "discriminator": [
+        239,
+        84,
+        174,
+        135,
+        135,
+        196,
+        38,
+        246
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "staff_member",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "reset_available_tokens",
+      "discriminator": [
+        6,
+        39,
+        216,
+        11,
+        248,
+        244,
+        210,
+        54
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "player_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "player_id",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "set_nft_image_url",
+      "discriminator": [
+        174,
+        80,
+        192,
+        10,
+        103,
+        136,
+        22,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "stake_team",
+      "discriminator": [
+        64,
+        183,
+        63,
+        190,
+        205,
+        232,
+        82,
+        95
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "team_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_stake_state",
+          "docs": [
+            "User stake state tracking account (list of team IDs)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_stake_state",
+          "docs": [
+            "Individual team stake state account (detailed state)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "arg",
+                "path": "team_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_nft_account",
+          "docs": [
+            "User's NFT account (source)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_nft_account",
+          "docs": [
+            "Program's NFT account (destination)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_nft_authority",
+          "docs": [
+            "PDA authority for program's NFT account"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "docs": [
+            "Clock for timestamp"
+          ],
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "team_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "unpause",
+      "discriminator": [
+        169,
+        144,
+        4,
+        38,
+        10,
+        141,
+        188,
+        255
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_player",
+      "discriminator": [
+        188,
+        237,
+        209,
+        245,
+        60,
+        160,
+        16,
+        126
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "player_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  121,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "player_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "player_id",
+          "type": "u16"
+        },
+        {
+          "name": "provider_id",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "category",
+          "type": {
+            "option": {
+              "defined": {
+                "name": "PlayerCategory"
+              }
+            }
+          }
+        },
+        {
+          "name": "total_tokens",
+          "type": {
+            "option": "u32"
+          }
+        },
+        {
+          "name": "metadata_uri",
+          "type": {
+            "option": {
+              "option": "string"
+            }
+          }
+        },
+        {
+          "name": "name",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "discipline",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "country",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_team_prices",
+      "discriminator": [
+        147,
+        23,
+        15,
+        163,
+        153,
+        67,
+        136,
+        151
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "price_a",
+          "type": "u64"
+        },
+        {
+          "name": "price_b",
+          "type": "u64"
+        },
+        {
+          "name": "price_c",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
+      "discriminator": [
+        183,
+        18,
+        70,
+        156,
+        148,
+        109,
+        161,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program_usdc_account",
+          "docs": [
+            "Program's USDC token account (treasury)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_usdc_authority",
+          "docs": [
+            "PDA authority for program's USDC account"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  100,
+                  99,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_usdc_account",
+          "docs": [
+            "User's USDC token account (destination)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "clock",
+          "docs": [
+            "Clock for timestamps"
+          ],
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw_team",
+      "discriminator": [
+        132,
+        156,
+        138,
+        250,
+        32,
+        15,
+        101,
+        35
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "team_id"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  214,
+                  196,
+                  43,
+                  56,
+                  138,
+                  188,
+                  163,
+                  240,
+                  188,
+                  241,
+                  218,
+                  26,
+                  105,
+                  11,
+                  124,
+                  134,
+                  34,
+                  74,
+                  135,
+                  254,
+                  24,
+                  8,
+                  101,
+                  49,
+                  226,
+                  36,
+                  76,
+                  181,
+                  18,
+                  223,
+                  126,
+                  79
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_stake_state",
+          "docs": [
+            "User stake state tracking account (list of team IDs)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "team_stake_state",
+          "docs": [
+            "Individual team stake state account (detailed state)"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  101,
+                  97,
+                  109,
+                  95,
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              },
+              {
+                "kind": "arg",
+                "path": "team_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "user_nft_account",
+          "docs": [
+            "User's NFT token account (destination)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_nft_account",
+          "docs": [
+            "Program's NFT token account (source)"
+          ],
+          "writable": true
+        },
+        {
+          "name": "program_nft_authority",
+          "docs": [
+            "PDA authority for program's NFT account"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "game_state"
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "docs": [
+            "Clock for timestamp"
+          ],
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "team_id",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GameState",
+      "discriminator": [
+        144,
+        94,
+        208,
+        172,
+        248,
+        99,
+        134,
+        120
+      ]
+    },
+    {
+      "name": "Player",
+      "discriminator": [
+        205,
+        222,
+        112,
+        7,
+        165,
+        155,
+        206,
+        218
+      ]
+    },
+    {
+      "name": "Report",
+      "discriminator": [
+        232,
+        246,
+        229,
+        227,
+        242,
+        105,
+        190,
+        2
+      ]
+    },
+    {
+      "name": "Team",
+      "discriminator": [
+        140,
+        218,
+        177,
+        140,
+        193,
+        241,
+        199,
+        106
+      ]
+    },
+    {
+      "name": "TeamStakeState",
+      "discriminator": [
+        2,
+        213,
+        140,
+        149,
+        222,
+        204,
+        113,
+        255
+      ]
+    },
+    {
+      "name": "UserStakeState",
+      "discriminator": [
+        249,
+        182,
+        149,
+        175,
+        99,
+        149,
+        92,
+        103
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "TeamEnteredField",
+      "discriminator": [
+        235,
+        21,
+        58,
+        2,
+        154,
+        21,
+        42,
+        101
+      ]
+    },
+    {
+      "name": "TeamStartedWarmup",
+      "discriminator": [
+        219,
+        132,
+        206,
+        207,
+        221,
+        106,
+        106,
+        167
+      ]
+    },
+    {
+      "name": "TeamStartedWithdrawal",
+      "discriminator": [
+        195,
+        179,
+        229,
+        148,
+        197,
+        234,
+        202,
+        160
+      ]
+    },
+    {
+      "name": "TeamWithdrawn",
+      "discriminator": [
+        81,
+        96,
+        11,
+        34,
+        127,
+        203,
+        158,
+        3
+      ]
+    },
+    {
+      "name": "TokenSold",
+      "discriminator": [
+        88,
+        61,
+        1,
+        247,
+        185,
+        6,
+        252,
+        86
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InsufficientTokens",
+      "msg": "Insufficient tokens available"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidPlayerId",
+      "msg": "Invalid player ID"
+    },
+    {
+      "code": 6002,
+      "name": "TokenOverflow",
+      "msg": "Token overflow"
+    },
+    {
+      "code": 6003,
+      "name": "UnauthorizedAccess",
+      "msg": "Unauthorized access"
+    },
+    {
+      "code": 6004,
+      "name": "StaffLimitExceeded",
+      "msg": "Staff limit exceeded"
+    },
+    {
+      "code": 6005,
+      "name": "StaffAlreadyExists",
+      "msg": "Staff already exists"
+    },
+    {
+      "code": 6006,
+      "name": "StaffNotFound",
+      "msg": "Staff not found"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidTokenUpdate",
+      "msg": "Invalid token update"
+    },
+    {
+      "code": 6008,
+      "name": "InsufficientPlayersAvailable",
+      "msg": "Insufficient players available"
+    },
+    {
+      "code": 6009,
+      "name": "InsufficientPremiumPlayers",
+      "msg": "Insufficient premium players"
+    },
+    {
+      "code": 6010,
+      "name": "RandomSelectionFailed",
+      "msg": "Random selection failed"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidPrice",
+      "msg": "Invalid price"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidStateTransition",
+      "msg": "Invalid state transition"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidAmount",
+      "msg": "Invalid amount"
+    },
+    {
+      "code": 6014,
+      "name": "RewardAlreadyDistributed",
+      "msg": "Reward already distributed"
+    },
+    {
+      "code": 6015,
+      "name": "NoEligibleTeams",
+      "msg": "No eligible teams"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidAccountsProvided",
+      "msg": "Invalid accounts provided"
+    },
+    {
+      "code": 6017,
+      "name": "InvalidTeamId",
+      "msg": "Invalid team ID"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidTeamState",
+      "msg": "Team not in correct state for this operation"
+    },
+    {
+      "code": 6019,
+      "name": "WaitingPeriodNotComplete",
+      "msg": "Waiting period not complete"
+    },
+    {
+      "code": 6020,
+      "name": "NftTransferFailed",
+      "msg": "NFT transfer failed"
+    },
+    {
+      "code": 6021,
+      "name": "NoOpenReport",
+      "msg": "No hay un reporte abierto para acumular ventas"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidReportId",
+      "msg": "Invalid report ID"
+    },
+    {
+      "code": 6023,
+      "name": "NoRewardsAvailable",
+      "msg": "No rewards available to claim"
+    },
+    {
+      "code": 6024,
+      "name": "ReportExpired",
+      "msg": "Report expired"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidGameState",
+      "msg": "Invalid game state"
+    },
+    {
+      "code": 6026,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds"
+    },
+    {
+      "code": 6027,
+      "name": "ContractPaused",
+      "msg": "Contract is paused"
+    },
+    {
+      "code": 6028,
+      "name": "TermsNotAccepted",
+      "msg": "Terms and conditions must be accepted"
+    },
+    {
+      "code": 6029,
+      "name": "InvalidPackage",
+      "msg": "Invalid package selected"
+    },
+    {
+      "code": 6030,
+      "name": "TeamIdOverflow",
+      "msg": "Team ID overflow protection"
+    },
+    {
+      "code": 6031,
+      "name": "InvalidUsdcMint",
+      "msg": "Invalid USDC mint address"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidTokenAccount",
+      "msg": "Invalid token account"
+    },
+    {
+      "code": 6033,
+      "name": "WithdrawalRequestExists",
+      "msg": "Withdrawal request already exists"
+    },
+    {
+      "code": 6034,
+      "name": "NoWithdrawalRequestPending",
+      "msg": "No withdrawal request pending"
+    },
+    {
+      "code": 6035,
+      "name": "CannotApproveSelfWithdrawal",
+      "msg": "Cannot approve own withdrawal request"
+    },
+    {
+      "code": 6036,
+      "name": "WithdrawalAmountMismatch",
+      "msg": "Withdrawal amount mismatch"
+    },
+    {
+      "code": 6037,
+      "name": "UserDoesNotOwnNft",
+      "msg": "User does not own the NFT"
+    },
+    {
+      "code": 6038,
+      "name": "InvalidNftMint",
+      "msg": "Invalid NFT mint"
+    },
+    {
+      "code": 6039,
+      "name": "InvalidPriceFeed",
+      "msg": "Invalid price feed"
+    }
+  ],
+  "types": [
+    {
+      "name": "GameState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "staff",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "players",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "PlayerSummary"
+                }
+              }
+            }
+          },
+          {
+            "name": "next_player_id",
+            "type": "u16"
+          },
+          {
+            "name": "mint_usdc",
+            "type": "pubkey"
+          },
+          {
+            "name": "team_price_a",
+            "type": "u64"
+          },
+          {
+            "name": "team_price_b",
+            "type": "u64"
+          },
+          {
+            "name": "team_price_c",
+            "type": "u64"
+          },
+          {
+            "name": "next_team_id",
+            "type": "u64"
+          },
+          {
+            "name": "next_reward_id",
+            "type": "u64"
+          },
+          {
+            "name": "nft_update_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_image_url",
+            "type": "string"
+          },
+          {
+            "name": "current_report_id",
+            "type": "u64"
+          },
+          {
+            "name": "current_report_start",
+            "type": "i64"
+          },
+          {
+            "name": "is_report_open",
+            "type": "bool"
+          },
+          {
+            "name": "current_report_revenue",
+            "type": "u64"
+          },
+          {
+            "name": "current_report_teams",
+            "type": "u32"
+          },
+          {
+            "name": "current_report_tokens",
+            "type": "u32"
+          },
+          {
+            "name": "is_paused",
+            "type": "bool"
+          },
+          {
+            "name": "pending_withdrawal",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WithdrawalRequest"
+                }
+              }
+            }
+          },
+          {
+            "name": "time_lock",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Player",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u16"
+          },
+          {
+            "name": "provider_id",
+            "type": "u16"
+          },
+          {
+            "name": "category",
+            "type": {
+              "defined": {
+                "name": "PlayerCategory"
+              }
+            }
+          },
+          {
+            "name": "total_tokens",
+            "type": "u32"
+          },
+          {
+            "name": "tokens_sold",
+            "type": "u32"
+          },
+          {
+            "name": "metadata_uri",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "discipline",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlayerCategory",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Bronze"
+          },
+          {
+            "name": "Silver"
+          },
+          {
+            "name": "Gold"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlayerSummary",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u16"
+          },
+          {
+            "name": "category",
+            "type": {
+              "defined": {
+                "name": "PlayerCategory"
+              }
+            }
+          },
+          {
+            "name": "available_tokens",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Report",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "report_id",
+            "type": "u64"
+          },
+          {
+            "name": "epoch",
+            "type": "u64"
+          },
+          {
+            "name": "start_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "end_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "revenue",
+            "type": "u64"
+          },
+          {
+            "name": "teams_sold",
+            "type": "u32"
+          },
+          {
+            "name": "tokens_sold",
+            "type": "u32"
+          },
+          {
+            "name": "staker_pool",
+            "type": "u64"
+          },
+          {
+            "name": "stakers_count",
+            "type": "u32"
+          },
+          {
+            "name": "reward_per_staker",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Team",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "first_buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "player_ids",
+            "type": {
+              "vec": "u16"
+            }
+          },
+          {
+            "name": "category",
+            "type": {
+              "defined": {
+                "name": "TeamPackage"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "transition_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "nft_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "TeamState"
+              }
+            }
+          },
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "terms_accepted",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamEnteredField",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamPackage",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "A"
+          },
+          {
+            "name": "B"
+          },
+          {
+            "name": "C"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamStakeState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "TeamState"
+              }
+            }
+          },
+          {
+            "name": "transition_timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "rewards_earned",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamStartedWarmup",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamStartedWithdrawal",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Free"
+          },
+          {
+            "name": "WarmingUp"
+          },
+          {
+            "name": "OnField"
+          },
+          {
+            "name": "ToWithdraw"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TeamWithdrawn",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenSold",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "player_id",
+            "type": "u16"
+          },
+          {
+            "name": "team_id",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "report_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UserStakeState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_team_ids",
+            "type": {
+              "vec": "u64"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "WithdrawalRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "requester",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}
