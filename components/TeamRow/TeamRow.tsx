@@ -301,14 +301,31 @@ export const TeamRow = React.memo(function TeamRow({
     getTimeLockSeconds().then(setTimeLock);
   }, [loadTeamData, getTimeLockSeconds]);
 
+  // Reload team data after mount if in WarmingUp state without transitionTimestamp
+  useEffect(() => {
+    if (!team || loading || actionLoading) return;
+    
+    const needsReload = 
+      (team.state === "WarmingUp" || team.state === "ToWithdraw") && 
+      (!team.transitionTimestamp || team.transitionTimestamp === 0);
+    
+    if (needsReload) {
+      const timer = setTimeout(() => {
+        loadTeamData();
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [team, loading, actionLoading, loadTeamData]);
+
   const handleAction = useCallback(
     async (action: string, teamId: number) => {
       try {
         setActionLoading(true);
         await onAction(action, teamId);
         
-        // Wait a bit longer for blockchain to update state
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Wait for blockchain to update state
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Force reload team data to get the new state from blockchain
         await loadTeamData();

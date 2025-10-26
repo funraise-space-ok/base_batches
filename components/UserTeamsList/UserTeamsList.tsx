@@ -76,8 +76,8 @@ export function UserTeamsList({
             warmupAudio.play().catch(() => {});
           } catch {}
           
-          // Small delay to ensure blockchain state is updated
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Longer delay to ensure blockchain state is fully updated
+          await new Promise(resolve => setTimeout(resolve, 2000));
           
           // Only after successful confirmation, remove from MY WALLET
           setUserTeamIds((prev) => prev.filter((id) => id !== teamId));

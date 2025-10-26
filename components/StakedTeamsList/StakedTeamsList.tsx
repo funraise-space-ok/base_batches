@@ -51,8 +51,8 @@ export function StakedTeamsList({
           // Wait for transaction to complete
           await setTeamStake(teamId, false);
           
-          // Small delay to ensure blockchain state is updated
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Longer delay to ensure blockchain state is fully updated
+          await new Promise(resolve => setTimeout(resolve, 2000));
           
           // Only after confirmation, notify dashboard to move team
           // Team will appear in TO WITHDRAW with countdown button
@@ -71,8 +71,8 @@ export function StakedTeamsList({
             onFieldAudio.play().catch(() => {});
           } catch {}
           
-          // Small delay to ensure blockchain state is updated
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Longer delay to ensure blockchain state is fully updated
+          await new Promise(resolve => setTimeout(resolve, 2000));
           
           // Only after confirmation, notify dashboard to move team
           // Team will appear in ON FIELD with "Withdraw" button
@@ -84,8 +84,8 @@ export function StakedTeamsList({
           // Wait for transaction to complete
           await refreshTeamStatus(teamId);
           
-          // Small delay to ensure blockchain state is updated
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Longer delay to ensure blockchain state is fully updated
+          await new Promise(resolve => setTimeout(resolve, 2000));
           
           // Only after confirmation, notify dashboard to move team
           // Team will return to MY WALLET with "Warm Up" button
