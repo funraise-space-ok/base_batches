@@ -1,0 +1,15 @@
+{
+  "buildCommand": "npm run build:vercel",
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "outputDirectory": ".next",
+  "functions": {
+    "app/**/*.tsx": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "SKIP_ENV_VALIDATION": "1"
+  }
+}
+
