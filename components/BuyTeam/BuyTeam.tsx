@@ -97,6 +97,7 @@ export function BuyTeam() {
   const [currentIndex, setCurrentIndex] = useState(1); // Start with the middle package (Premium)
   const [openingPackImage, setOpeningPackImage] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [processing, setProcessing] = useState(false);
 
   // Preload del fondo de campo apenas se monta la página
   useEffect(() => {
@@ -183,23 +184,31 @@ export function BuyTeam() {
   };
 
   const handleConfirmPurchase = async () => {
-    if (!selectedPackage || !termsAccepted) return;
+    if (!selectedPackage || !termsAccepted || processing) return;
 
     try {
+      setProcessing(true);
       setPlayerLoadError(null);
+      setFeedback(null);
+      console.log("[BuyTeam] Iniciando compra...");
       const result = await buyPack(selectedPackage.id, termsAccepted);
+      console.log("[BuyTeam] Compra completada:", result);
 
       let onChainPlayers: BasePlayer[] = [];
       try {
         if (result.playerIds && result.playerIds.length > 0) {
+          console.log("[BuyTeam] Obteniendo jugadores por IDs:", result.playerIds);
           onChainPlayers = await getPlayersByIds(result.playerIds);
         } else if (result.teamId) {
+          console.log("[BuyTeam] Obteniendo detalle del equipo:", result.teamId);
           const detail = await getTeamDetail(result.teamId);
+          console.log("[BuyTeam] Detalle del equipo:", detail);
           
           if (detail?.playerIds && detail.playerIds.length > 0) {
             onChainPlayers = await getPlayersByIds(detail.playerIds);
           }
         }
+        console.log("[BuyTeam] Jugadores obtenidos:", onChainPlayers.length);
       } catch (playerErr: any) {
         console.error("[BuyTeam] Error al cargar jugadores:", playerErr);
         setPlayerLoadError("No pudimos recuperar los jugadores generados on-chain. Mostramos un ejemplo.");
@@ -209,6 +218,9 @@ export function BuyTeam() {
         onChainPlayers.length > 0
           ? buildPlayersFromOnChain(onChainPlayers)
           : [];
+
+      console.log("[BuyTeam] Display players:", displayPlayers.length);
+      console.log("[BuyTeam] Mostrando animación de pack...");
 
       setPurchasedPlayers(displayPlayers);
       setOpeningPackImage(selectedPackage.imageSrc);
@@ -220,6 +232,7 @@ export function BuyTeam() {
           ? `Equipo #${result.teamId} generado correctamente.`
           : "Compra confirmada. Revisa tu dashboard en unos segundos.",
       );
+      setProcessing(false);
     } catch (purchaseError: any) {
       console.error('[BuyTeam] Error en la compra:', purchaseError);
       const message =
@@ -227,6 +240,7 @@ export function BuyTeam() {
         purchaseError?.message ||
         "No se pudo completar la compra.";
       setFeedback(message);
+      setProcessing(false);
     }
   };
 
@@ -238,6 +252,9 @@ export function BuyTeam() {
   const handleCloseDialog = () => {
     // Cerrar el diálogo sin limpiar aún para evitar flash de color por fallback
     setDialogOpen(false);
+    setProcessing(false);
+    setFeedback(null);
+    setPlayerLoadError(null);
   };
 
   const nextSlide = () => {
@@ -273,7 +290,7 @@ export function BuyTeam() {
             exit={{ opacity: 0 }}
             style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.85)' } as any}
           >
-            <Box sx={{ maxWidth: '1200px', mx: 'auto', py: 4 }}>
+            <Box sx={{ maxWidth: '1200px', mx: 'auto', py: { xs: 2, sm: 3, md: 4 }, px: { xs: 1, sm: 2 } }}>
               <PackOpeningAnimation
                 open={showPackOpening}
                 players={purchasedPlayers}
@@ -435,6 +452,7 @@ export function BuyTeam() {
                 component="h1" 
                 sx={{
                   fontWeight: 800,
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                   background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%)',
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
@@ -462,51 +480,65 @@ export function BuyTeam() {
           </Box>
         </motion.div>
 
-        <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 4 }}>
+              <Typography
+                variant="body1"
+          align="center" 
+                color="text.secondary"
+          sx={{ 
+            mb: { xs: 2, md: 4 },
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+            px: { xs: 2, sm: 0 }
+          }}
+        >
           Choose your pack and build your dream team
-        </Typography>
+              </Typography>
 
         {/* Carrusel de paquetes */}
         <Box sx={{ 
           position: 'relative', 
-          maxWidth: '1000px', 
-          mx: 'auto'
+          maxWidth: { xs: '100%', sm: '600px', md: '800px', lg: '1000px' }, 
+          mx: 'auto',
+          px: { xs: 1, sm: 2 }
         }}>
           {/* Botones de navegación */}
                 <IconButton
                   onClick={prevSlide}
-                  sx={{
+                sx={{
               position: 'absolute',
-              left: -60,
+              left: { xs: -10, sm: -30, md: -60 },
               top: '50%',
               transform: 'translateY(-50%)',
               zIndex: 2,
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
               color: 'white',
+              width: { xs: 32, sm: 40, md: 48 },
+              height: { xs: 32, sm: 40, md: 48 },
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
               }
                   }}
                 >
-                  <ChevronLeft />
+                  <ChevronLeft sx={{ fontSize: { xs: 20, sm: 24, md: 28 } }} />
                 </IconButton>
 
                 <IconButton
                   onClick={nextSlide}
                   sx={{
               position: 'absolute',
-              right: -60,
+              right: { xs: -10, sm: -30, md: -60 },
               top: '50%',
               transform: 'translateY(-50%)',
               zIndex: 2,
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
               color: 'white',
+              width: { xs: 32, sm: 40, md: 48 },
+              height: { xs: 32, sm: 40, md: 48 },
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.2)',
               }
                   }}
                 >
-                  <ChevronRight />
+                  <ChevronRight sx={{ fontSize: { xs: 20, sm: 24, md: 28 } }} />
                 </IconButton>
 
           {/* Contenedor del carrusel 3D */}
@@ -514,15 +546,15 @@ export function BuyTeam() {
             overflow: 'visible', 
             borderRadius: 2, 
             perspective: '1200px',
-            height: '650px',
+            height: { xs: '500px', sm: '580px', md: '650px' },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Box
-              sx={{
+              <Box
+                sx={{
                 position: 'relative',
-                width: '360px',
+                width: { xs: '280px', sm: '320px', md: '360px' },
                 height: '416px',
                 transformStyle: 'preserve-3d',
                 transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -561,7 +593,7 @@ export function BuyTeam() {
                     style={{
                       transformStyle: index === currentIndex ? 'flat' : 'preserve-3d',
                       width: '100%',
-                      maxWidth: '360px',
+                      maxWidth: { xs: '280px', sm: '320px', md: '360px' },
                       animation: (index === currentIndex && pkg.popular) ? 'heartbeat 2s infinite' : 'none'
                     } as any}
                 >
@@ -947,6 +979,7 @@ export function BuyTeam() {
         onClose={handleCloseDialog} 
         maxWidth="sm" 
         fullWidth
+        scroll="paper"
         TransitionProps={{
           onExited: () => {
             // Limpiar estado una vez que la transición haya terminado
@@ -955,13 +988,20 @@ export function BuyTeam() {
             setFeedback(null);
           }
         }}
+                      sx={{
+          '& .MuiDialog-container': {
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            pt: { xs: 2, sm: 0 }
+          }
+        }}
         PaperProps={{
           sx: {
             borderRadius: '20px',
             background: selectedPackage?.gradient || 'rgba(0,0,0,0.6)',
             color: 'white',
-            overflow: 'visible',
             position: 'relative',
+            maxHeight: { xs: '90vh', sm: '90vh' },
+            m: { xs: 1, sm: 2 },
             '&::before': {
               content: '""',
               position: 'absolute',
@@ -986,7 +1026,9 @@ export function BuyTeam() {
             textAlign: 'center', 
             position: 'relative', 
             zIndex: 2,
-            pb: 1
+            pb: 1,
+            px: { xs: 2, sm: 3 },
+            pt: { xs: 2, sm: 3 }
           }}>
             <motion.div
               animate={{ 
@@ -998,7 +1040,7 @@ export function BuyTeam() {
               }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               style={{ 
-                fontSize: '1.5rem',
+                fontSize: window.innerWidth < 600 ? '1.1rem' : '1.5rem',
                 fontWeight: 'bold',
                 display: 'flex',
                 alignItems: 'center',
@@ -1021,15 +1063,29 @@ export function BuyTeam() {
             </motion.div>
           </DialogTitle>
           
-          <DialogContent sx={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+          <DialogContent sx={{ 
+            position: 'relative', 
+            zIndex: 2, 
+            textAlign: 'center',
+            px: { xs: 2, sm: 3 },
+            py: { xs: 2, sm: 3 },
+            overflowY: 'auto'
+          }}>
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Typography variant="h4" sx={{ mb: 2, fontWeight: 'bold' }}>
+              <Typography 
+                variant="h4" 
+                      sx={{
+                  mb: 2, 
+                  fontWeight: 'bold',
+                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }
+                }}
+              >
                 {selectedPackage?.priceDisplay}
-              </Typography>
+                      </Typography>
             </motion.div>
 
             {/* Chip de rareza dentro del diálogo */}
@@ -1039,7 +1095,7 @@ export function BuyTeam() {
                 variant="filled"
                 icon={<Star />}
                 label={selectedPackage ? (selectedPackage.id === 'C' ? 'Gold' : selectedPackage.id === 'B' ? 'Silver' : 'Bronze') : ''}
-                sx={{
+                    sx={{
                   color: '#ffffff',
                   backgroundColor: '#9C27B0',
                   border: '1px solid #7E57C2',
@@ -1056,9 +1112,16 @@ export function BuyTeam() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
+                    <Typography
+                variant="body1" 
+                      sx={{
+                  mb: 3, 
+                  opacity: 0.9,
+                  fontSize: { xs: '0.875rem', sm: '1rem' }
+                }}
+              >
                 {selectedPackage?.description}
-              </Typography>
+                    </Typography>
             </motion.div>
             
             <motion.div
@@ -1071,7 +1134,7 @@ export function BuyTeam() {
               <Checkbox
                 checked={termsAccepted}
                     onChange={(e) => setTermsAccepted(e.target.checked)}
-                    sx={{
+                sx={{
                       color: 'rgba(255,255,255,0.7)',
                       '&.Mui-checked': {
                         color: 'white',
@@ -1090,7 +1153,7 @@ export function BuyTeam() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 120 }}
               >
-                <Alert 
+          <Alert
                   severity="error" 
                   sx={{ 
                     mt: 2,
@@ -1100,9 +1163,9 @@ export function BuyTeam() {
                       color: '#ff6b6b'
                     }
                   }}
-                >
-                  {feedback}
-                </Alert>
+          >
+            {feedback}
+          </Alert>
               </motion.div>
             )}
         </DialogContent>
@@ -1111,14 +1174,17 @@ export function BuyTeam() {
             position: 'relative', 
             zIndex: 2, 
             justifyContent: 'center',
-            gap: 2,
-            pb: 3
+            gap: { xs: 1, sm: 2 },
+            pb: { xs: 2, sm: 3 },
+            px: { xs: 2, sm: 3 },
+            flexDirection: { xs: 'column', sm: 'row' }
           }}>
             <Button 
               onClick={handleCloseDialog}
               sx={{
                 color: 'white',
                 borderColor: 'rgba(255,255,255,0.3)',
+                width: { xs: '100%', sm: 'auto' },
                 '&:hover': {
                   borderColor: 'rgba(255,255,255,0.6)',
                   backgroundColor: 'rgba(255,255,255,0.1)'
@@ -1132,21 +1198,23 @@ export function BuyTeam() {
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              style={{ width: window.innerWidth < 600 ? '100%' : 'auto' } as any}
             >
           <Button
             onClick={handleConfirmPurchase}
             variant="contained"
-            disabled={!termsAccepted || loading}
-                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+            disabled={!termsAccepted || loading || processing}
+                startIcon={processing || loading ? <CircularProgress size={20} color="inherit" /> : null}
                 sx={{
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
                   fontWeight: 'bold',
-                  px: 4,
+                  px: { xs: 3, sm: 4 },
                   py: 1.5,
                   borderRadius: '12px',
                   backdropFilter: 'blur(10px)',
                   border: '1px solid rgba(255,255,255,0.3)',
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': {
                     background: 'rgba(255,255,255,0.3)',
                     transform: 'translateY(-2px)',
@@ -1158,7 +1226,7 @@ export function BuyTeam() {
                   }
                 }}
               >
-                {loading ? 'Buying...' : 'Confirm Purchase'}
+                {processing ? 'Procesando transacción...' : loading ? 'Buying...' : 'Confirm Purchase'}
           </Button>
             </motion.div>
         </DialogActions>

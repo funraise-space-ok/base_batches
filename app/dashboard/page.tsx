@@ -137,7 +137,7 @@ export default function DashboardPage() {
         }
       } catch (error) {
         console.error("Error loading dashboard data:", error);
-      } finally {
+    } finally {
         setIsLoadingStakedTeams(false);
       }
     };
@@ -173,20 +173,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
+    <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+      <Grid container spacing={{ xs: 2, sm: 2, md: 3 }}>
         {/* Left Column: My Wallet + To Withdraw (38%) */}
-        <Grid item xs={12} md sx={{ flexBasis: { md: "38%" }, maxWidth: { md: "38%" } }}>
+        <Grid item xs={12} lg sx={{ flexBasis: { lg: "38%" }, maxWidth: { lg: "38%" } }}>
           <Grow in={showMyWallet} timeout={800}>
-            <Card
-              sx={{
+      <Card
+        sx={{
                 background: "linear-gradient(135deg, #1a0d2e 0%, #16213e 50%, #0f3460 100%)",
                 border: "2px solid #6a1b9a",
                 borderRadius: "16px",
                 boxShadow:
                   "0 8px 32px rgba(106, 27, 154, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
                 position: "relative",
-                overflow: "hidden",
+          overflow: "hidden",
                 transition: "all 0.3s ease-in-out",
                 "&:hover": {
                   transform: "translateY(-2px)",
@@ -203,9 +203,9 @@ export default function DashboardPage() {
                     "radial-gradient(circle at 20% 80%, rgba(156, 39, 176, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(103, 58, 183, 0.2) 0%, transparent 50%)",
                   pointerEvents: "none",
                 },
-              }}
-            >
-              <CardContent sx={{ position: "relative", zIndex: 1 }}>
+        }}
+      >
+              <CardContent sx={{ position: "relative", zIndex: 1, px: { xs: 1.5, sm: 2, md: 3 }, py: { xs: 2, md: 3 } }}>
                 <Slide direction="up" in={showMyWallet} timeout={600}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1}>
                     <Typography
@@ -218,7 +218,7 @@ export default function DashboardPage() {
                       }}
                     >
                       MY WALLET
-                    </Typography>
+              </Typography>
                     <Button
                       variant="outlined"
                       size="small"
@@ -268,7 +268,7 @@ export default function DashboardPage() {
                 mt: 3,
               }}
             >
-              <CardContent sx={{ position: "relative", zIndex: 1 }}>
+              <CardContent sx={{ position: "relative", zIndex: 1, px: { xs: 1.5, sm: 2, md: 3 }, py: { xs: 2, md: 3 } }}>
                 <Slide direction="up" in={showToWithdraw} timeout={600}>
                   <Typography
                     variant="overline"
@@ -294,11 +294,11 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Grow>
-        </Grid>
+            </Grid>
 
         {/* Center Column: Stadium (Warm Up + On Field) - 62% with field background */}
-        <Grid item xs={12} md sx={{ flexBasis: { md: "62%" }, maxWidth: { md: "62%" } }}>
-          <Box sx={{ position: "relative", borderRadius: 2, overflow: "hidden", minHeight: 600 }}>
+        <Grid item xs={12} lg sx={{ flexBasis: { lg: "62%" }, maxWidth: { lg: "62%" } }}>
+          <Box sx={{ position: "relative", borderRadius: 2, overflow: "hidden", minHeight: { xs: 400, sm: 500, md: 600 } }}>
             {/* Field background */}
             <Box sx={{ position: "absolute", inset: 0 }}>
               <Image
@@ -314,11 +314,11 @@ export default function DashboardPage() {
               />
             </Box>
             {/* Vignette overlay */}
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                background:
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background:
                   "radial-gradient(ellipse at center, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.45) 70%, rgba(0,0,0,0.6) 100%)",
               }}
             />
@@ -335,8 +335,8 @@ export default function DashboardPage() {
               }}
             >
               <Grow in={showWarmingUp} timeout={800}>
-                <Card
-                  sx={{
+                    <Card
+                      sx={{
                     border: "2px solid #ff9800",
                     borderRadius: "16px",
                     boxShadow:
@@ -363,7 +363,7 @@ export default function DashboardPage() {
                         }}
                       >
                         WARMING UP ({warmingUpTeamIds.length})
-                      </Typography>
+                            </Typography>
                     </Slide>
                     <Divider sx={{ borderColor: "rgba(255, 152, 0, 0.3)" }} />
                     <Collapse in={showWarmingUp} timeout={1000}>
@@ -376,8 +376,8 @@ export default function DashboardPage() {
                         />
                       </Box>
                     </Collapse>
-                  </CardContent>
-                </Card>
+                      </CardContent>
+                    </Card>
               </Grow>
 
               <Grow in={showOnField} timeout={800}>
@@ -422,10 +422,10 @@ export default function DashboardPage() {
                         />
                       </Box>
                     </Collapse>
-                  </CardContent>
-                </Card>
+            </CardContent>
+          </Card>
               </Grow>
-            </Stack>
+                </Stack>
           </Box>
         </Grid>
       </Grid>

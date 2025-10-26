@@ -57,10 +57,17 @@ function PackOpeningAnimation({
   ipfsGateway = "https://cloudflare-ipfs.com/ipfs/",
   packImageSrc = "/booster_pack.png",
 }: Props) {
+  console.log("[PackOpeningAnimation] Renderizado con:", { 
+    open, 
+    playersCount: players?.length, 
+    players: players 
+  });
+  
   // visibilidad interna
   const [internalOpen, setInternalOpen] = useState(false);
   useEffect(() => {
     if (open) {
+      console.log("[PackOpeningAnimation] Iniciando animación con", players?.length, "jugadores");
       // Reinicia estado para nueva apertura y muestra overlay
       setInternalOpen(true);
       setStage('closed');
@@ -72,6 +79,7 @@ function PackOpeningAnimation({
     } else {
       // Cerrar overlay si el padre apagó open
       if (internalOpen) {
+        console.log("[PackOpeningAnimation] Cerrando animación");
         setInternalOpen(false);
         cleanup();
       }
@@ -198,10 +206,11 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
     } as const;
   }, [packImageSrc]);
 
-  // layout determinístico (px fijos)
-  const GAP = 24;
-  const CARD_W = 160;
-  const CARD_H = Math.round(CARD_W * 4/3); // 213
+  // layout determinístico (px fijos, responsive en mobile)
+  const isMobile = viewport.w < 600;
+  const GAP = isMobile ? 8 : 24;
+  const CARD_W = isMobile ? 85 : 160;
+  const CARD_H = Math.round(CARD_W * 4/3); // 213 desktop, 113 mobile
   const TOTAL_W = 5*CARD_W + 4*GAP;
 
   // 5 cartas ordenadas por rareza (oro, plata, bronce)
@@ -588,14 +597,14 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
         <div
           style={{
             position: "relative",
-            width: `${3 * CARD_W + 2 * GAP + 160}px`, // Ancho ampliado para mejor proporción
-            height: `${2 * CARD_H + GAP + 160}px`, // Alto ampliado para mejor proporción
+            width: `${3 * CARD_W + 2 * GAP + (isMobile ? 40 : 160)}px`, // Ancho reducido en mobile
+            height: `${2 * CARD_H + GAP + (isMobile ? 60 : 160)}px`, // Alto reducido en mobile
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             gap: `${GAP}px`,
-            paddingTop: 56,
+            paddingTop: isMobile ? 40 : 56,
           }}
         >
           {/* Campo dentro del marco (recortado al área interna). Debe quedar debajo del borde del marco */}
@@ -667,7 +676,7 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
           {/* Pack centrado base durante launching (debajo de cartas volando) */}
           {(stage === 'launching') && (
             <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', opacity: 0.2 }}>
-              <div style={{ position: 'relative', width: CARD_W + 60, height: CARD_H + 60 }}>
+              <div style={{ position: 'relative', width: CARD_W + (isMobile ? 30 : 60), height: CARD_H + (isMobile ? 30 : 60) }}>
                 <Image src={packImageSrc || "/booster_pack.png"} alt="pack" fill style={{ objectFit: 'contain' }} unoptimized />
               </div>
             </div>
@@ -678,11 +687,11 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
               {/* Confeti dentro del área de cartas */}
               {[...Array(20)].map((_, i) => {
                 // Área de confeti basada en el ancho ampliado del contenedor
-                const containerWidth = 3 * CARD_W + 2 * GAP + 160;
-                const containerHeight = 2 * CARD_H + GAP + 160;
+                const containerWidth = 3 * CARD_W + 2 * GAP + (isMobile ? 40 : 160);
+                const containerHeight = 2 * CARD_H + GAP + (isMobile ? 60 : 160);
                 
                 // Distribuir confeti en el área central donde están las cartas
-                const margin = 80; // Margen más amplio
+                const margin = isMobile ? 20 : 80; // Margen más amplio
                 const randomX = margin + Math.random() * (containerWidth - 2 * margin);
                 const randomY = -100; // Empezar arriba
                 
@@ -734,14 +743,14 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                 }}
                 style={{
                   position: "absolute",
-                  top: 28,
+                  top: viewport.w < 600 ? 8 : 28,
                   left: 0,
                   right: 0,
                   transform: "none",
-                  fontSize: "28px",
+                  fontSize: viewport.w < 600 ? "18px" : "28px",
                   fontWeight: "bold",
                   color: frameAccent.text,
-                  letterSpacing: "4px",
+                  letterSpacing: viewport.w < 600 ? "2px" : "4px",
                   textAlign: "center",
                   zIndex: 5,
                   pointerEvents: "none",
@@ -777,7 +786,7 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
               transition={{ duration: 1.8, ease: "easeOut" }}
               style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
             >
-              <div style={{ position: 'relative', width: CARD_W + 80, height: CARD_H + 80 }}>
+              <div style={{ position: 'relative', width: CARD_W + (isMobile ? 40 : 80), height: CARD_H + (isMobile ? 40 : 80) }}>
                 {/* Secuencia de frames: base → _02 → _03 con cross-fade */}
                 <FrameSequenceCrossFade baseSrc={packImageSrc || "/booster_pack.png"} step={explosionStep} />
                 {/* destello radial */}
@@ -789,7 +798,7 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                 />
                 {/* partículas de explosión */}
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-                  <BurstParticles w={CARD_W + 80} h={CARD_H + 80} seed={`center-burst`} />
+                  <BurstParticles w={CARD_W + (isMobile ? 40 : 80)} h={CARD_H + (isMobile ? 40 : 80)} seed={`center-burst`} />
                 </div>
               </div>
             </motion.div>
@@ -802,7 +811,8 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                 const i = launched - 1; // mostrar solo la actual
                 if (i < 0 || i >= five.length) return null;
                 const p = five[i];
-                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP);
+                const isMobile = viewport.w < 600;
+                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP, isMobile);
                 return (
                   <CardFlightSlot
                     key={`flight-${i}-${p?.id ?? 'x'}`}
@@ -835,7 +845,8 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                 // Permanece visible para blindar contra flickers en producción
                 const i = 0;
                 const p = five[i];
-                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP);
+                const isMobile = viewport.w < 600;
+                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP, isMobile);
                 return (
                   <div
                     key={`grid-pinned-0`}
@@ -869,7 +880,8 @@ type Stage = "closed" | "exploding" | "launching" | "revealing" | "grid" | "beat
                 );
               })()}
               {five.map((p, i) => {
-                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP);
+                const isMobile = viewport.w < 600;
+                const pos = getSlotPosition(i, CARD_W, CARD_H, GAP, isMobile);
                 const visible = i < maxSlotsVisible;
                 // Nunca volver a 0 una vez visible (protección ante glitches)
                 // Esto asegura que si slotsVisible baja por cualquier razón, no ocultemos cartas ya mostradas
@@ -1176,6 +1188,8 @@ function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, fal
     }
   }, [landed]);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 600;
+
   return (
     <div style={{ position: 'absolute', left: x, top: y, width: cardW, height: cardH }}>
       <AnimatePresence initial={false}>
@@ -1191,14 +1205,17 @@ function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, fal
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
                 style={{
                   position: 'fixed', inset: 0, zIndex: 50,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  display: 'flex', 
+                  alignItems: isMobile ? 'flex-start' : 'center', 
+                  justifyContent: 'center',
+                  paddingTop: isMobile ? '5vh' : '0',
                   pointerEvents: 'none'
                 }}
               >
-                <div style={{ position: 'relative', width: cardW * 2.6, height: cardH * 2.6 }}>
+                <div style={{ position: 'relative', width: cardW * (isMobile ? 2.0 : 2.6), height: cardH * (isMobile ? 2.0 : 2.6) }}>
                   <Card
-                    w={cardW * 2.6}
-                    h={cardH * 2.6}
+                    w={cardW * (isMobile ? 2.0 : 2.6)}
+                    h={cardH * (isMobile ? 2.0 : 2.6)}
                     img={cardImg || ''}
                     fallbackImg={fallbackImg}
                     placeholderImg={placeholderImg}
@@ -1240,15 +1257,16 @@ function CardFlightSlot({ x, y, cardW, cardH, gap, landed, packImg, cardImg, fal
   );
 }
 
-function getSlotPosition(i:number, CARD_W:number, CARD_H:number, GAP:number) {
+function getSlotPosition(i:number, CARD_W:number, CARD_H:number, GAP:number, isMobile = false) {
   // 0..1 en la primera fila, 2..4 en la segunda fila
   const firstRow = [0,1];
   const isFirst = i <= 1;
   const idx = i;
-  const containerW = 3 * CARD_W + 2 * GAP + 160;
-  const containerH = 2 * CARD_H + GAP + 160;
+  const containerW = 3 * CARD_W + 2 * GAP + (isMobile ? 40 : 160);
+  const containerH = 2 * CARD_H + GAP + (isMobile ? 60 : 160);
   const centerX = containerW/2 - (CARD_W/2);
-  const Y_SHIFT = 24; // bajar un poco ambas filas (ajuste fino)
+  // En móvil, bajar las cartas dentro del contenedor (0 = centrado); en desktop, bajar un poco (+24px)
+  const Y_SHIFT = isMobile ? 0 : 24;
   const topY = containerH/2 - CARD_H - GAP/2 + Y_SHIFT;
   const bottomY = containerH/2 + GAP/2 + Y_SHIFT;
 

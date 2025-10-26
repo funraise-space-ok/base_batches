@@ -189,7 +189,8 @@ const TeamActionButton = ({
       startIcon={isLoading ? <CircularProgress size={16} /> : config.icon}
       sx={{
         width: "100%",
-        minWidth: "200px",
+        minWidth: { xs: "140px", sm: "180px", md: "200px" },
+        fontSize: { xs: "0.75rem", sm: "0.875rem" },
         ...(config.action === "stake" && {
           background: "#512DA8",
           "&:hover": {
@@ -403,7 +404,7 @@ export const TeamRow = React.memo(function TeamRow({
         component="td"
         scope="row"
         colSpan={3}
-        sx={{ p: 1.5, textAlign: "center" }}
+        sx={{ p: { xs: 0.5, sm: 1, md: 1.5 }, textAlign: "center" }}
       >
         <Box
           sx={{
@@ -425,7 +426,7 @@ export const TeamRow = React.memo(function TeamRow({
             sx={{
               borderRadius: 1.5,
               py: 0.75,
-              px: 4,
+              px: { xs: 1, sm: 2, md: 4 },
               backgroundColor: overlayBg || "rgba(10,10,10,0.5)",
               backdropFilter: "blur(4px)",
               boxSizing: "border-box",
