@@ -61,11 +61,8 @@ export function StakedTeamsList({
           }
         } else if (action === "check_transition") {
           // WarmingUp -> OnField
-          console.log(`[StakedTeamsList] Starting transition for team ${teamId}: WarmingUp -> OnField`);
-          
           // Wait for transaction to complete
           await refreshTeamStatus(teamId);
-          console.log(`[StakedTeamsList] Transaction confirmed for team ${teamId}`);
           
           // Small delay to ensure blockchain state is updated
           await new Promise(resolve => setTimeout(resolve, 1000));
@@ -73,7 +70,6 @@ export function StakedTeamsList({
           // Only after confirmation, notify dashboard to move team
           // Team will appear in ON FIELD with "Withdraw" button
           if (onTeamTransitioned) {
-            console.log(`[StakedTeamsList] Moving team ${teamId} to ON FIELD section`);
             onTeamTransitioned(teamId);
           }
         } else if (action === "complete_withdraw") {

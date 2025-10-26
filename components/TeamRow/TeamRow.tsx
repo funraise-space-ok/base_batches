@@ -288,8 +288,6 @@ export const TeamRow = React.memo(function TeamRow({
         ...teamData,
         cards,
       });
-      
-      console.log(`[TeamRow] Team ${teamId} loaded with state:`, teamData.state);
     } catch (error) {
       console.error("Error loading team data:", error);
       setTeam(null);
@@ -388,63 +386,62 @@ export const TeamRow = React.memo(function TeamRow({
         component="td"
         scope="row"
         colSpan={3}
-        sx={{ p: 1.5, overflow: "visible", display: "flex", justifyContent: "center" }}
+        sx={{ p: 1.5, textAlign: "center" }}
       >
         <Box
           sx={{
             position: "relative",
             borderRadius: 2,
-            p: 0.75,
-            width: containerGradient ? "100%": "fit-content",
+            p: 0.5,
+            width: "fit-content",
             boxSizing: "border-box",
-            mx: "auto",
+            display: "inline-block",
             background:
               containerGradient ||
               "linear-gradient(135deg, rgba(80,80,255,0.35), rgba(0,200,150,0.35))",
             boxShadow:
               "0 0 18px rgba(90, 200, 255, 0.15), inset 0 0 8px rgba(0, 255, 200, 0.15)",
-            outline: "1px solid rgba(255,255,255,0.06)",
-            outlineOffset: 3,
-            overflow: "visible",
+            border: "1px solid rgba(255,255,255,0.06)",
           }}
         >
           <Box
             sx={{
               borderRadius: 1.5,
-              p: 1,
+              py: 0.75,
+              px: 4,
               backgroundColor: overlayBg || "rgba(10,10,10,0.5)",
               backdropFilter: "blur(4px)",
-              display: "flex",
-              justifyContent: "center",
-              width: overlapCards ? "fit-content" : "100%",
               boxSizing: "border-box",
-              maxWidth: "100%",
-              overflow: "visible",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Stack spacing={1} sx={{ width: "fit-content", alignItems: "center", position: "relative" }}>
-              {!overlapCards ? (
-                <Stack direction="row" gap={0.6} justifyContent="center" sx={{ px: 0.5 }}>
-                  {cards.map((card: any, index: number) => (
-                    <Zoom
-                      key={`${team.teamId}-${index}`}
-                      in={true}
-                      timeout={600}
-                      style={{ transitionDelay: `${index * 100}ms` }}
-                    >
-                      <div style={{ display: "inline-block" }}>
-                        <PlayerCard
-                          sx={{ zoom: cardZoom }}
-                          expandable
-                          {...card}
-                          details={<CardDetails card={card} />}
-                        />
-                      </div>
-                    </Zoom>
-                  ))}
-                </Stack>
-              ) : (
-                <Box sx={{ px: 0.5, display: "flex", justifyContent: "center", overflow: "visible" }}>
+            <Stack spacing={1} sx={{ alignItems: "center", width: "100%" }}>
+              <Box display="flex" justifyContent="center" sx={{ width: "100%" }}>
+                {!overlapCards ? (
+                  <Stack direction="row" gap={0.6} justifyContent="center">
+                    {cards.map((card: any, index: number) => (
+                      <Zoom
+                        key={`${team.teamId}-${index}`}
+                        in={true}
+                        timeout={600}
+                        style={{ transitionDelay: `${index * 100}ms` }}
+                      >
+                        <div style={{ display: "inline-block" }}>
+                          <PlayerCard
+                            sx={{ zoom: cardZoom }}
+                            expandable
+                            {...card}
+                            details={<CardDetails card={card} />}
+                          />
+                        </div>
+                      </Zoom>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
                   {(() => {
                     const BASE_CARD_WIDTH_PX = 112;
                     const BASE_CARD_HEIGHT_PX = 160;
@@ -461,8 +458,8 @@ export const TeamRow = React.memo(function TeamRow({
                           position: "relative",
                           width: `${STRIP_WIDTH_PX}px`,
                           height: `${DISPLAY_HEIGHT_PX}px`,
-                          overflow: "visible",
                           mb: `${EXTRA_CLEARANCE_PX}px`,
+                          mx: "auto",
                         }}
                       >
                         {cards.map((card: any, index: number) => (
@@ -494,10 +491,11 @@ export const TeamRow = React.memo(function TeamRow({
                       </Box>
                     );
                   })()}
-                </Box>
-              )}
+                  </Box>
+                )}
+              </Box>
 
-              <Box display="flex" justifyContent="center" width="100%" sx={{ mt: isStaked ? 3 : 4 }}>
+              <Box display="flex" justifyContent="center" sx={{ mt: isStaked ? 3 : 4 }}>
                 <TeamActionButton
                   team={team}
                   onAction={handleAction}
