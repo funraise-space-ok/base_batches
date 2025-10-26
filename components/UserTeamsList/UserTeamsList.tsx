@@ -65,12 +65,25 @@ export function UserTeamsList({
   const handleTeamAction = useCallback(
     async (action: string, teamId: number) => {
       if (action === "stake") {
-        await setTeamStake(teamId, true);
-        // Remove from list
-        setUserTeamIds((prev) => prev.filter((id) => id !== teamId));
-        // Notify dashboard
-        if (onTeamStaked) {
-          onTeamStaked(teamId);
+        try {
+          // Wait for transaction to complete
+          await setTeamStake(teamId, true);
+          
+          // Small delay to ensure blockchain state is updated
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Only after successful confirmation, remove from MY WALLET
+          setUserTeamIds((prev) => prev.filter((id) => id !== teamId));
+          
+          // Notify dashboard to add to WARMING UP section
+          // The team will appear there with the countdown button
+          if (onTeamStaked) {
+            onTeamStaked(teamId);
+          }
+        } catch (error) {
+          console.error("Error staking team:", error);
+          // Don't remove from list if transaction failed
+          throw error;
         }
       }
     },

@@ -45,24 +45,55 @@ export function StakedTeamsList({
 
   const handleTeamAction = useCallback(
     async (action: string, teamId: number) => {
-      if (action === "withdraw") {
-        // Start withdraw process (OnField -> ToWithdraw)
-        await setTeamStake(teamId, false);
-        if (onTeamWithdrawn && section === "on_field") {
-          onTeamWithdrawn(teamId);
+      try {
+        if (action === "withdraw") {
+          // Start withdraw process (OnField -> ToWithdraw)
+          // Wait for transaction to complete
+          await setTeamStake(teamId, false);
+          
+          // Small delay to ensure blockchain state is updated
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Only after confirmation, notify dashboard to move team
+          // Team will appear in TO WITHDRAW with countdown button
+          if (onTeamWithdrawn && section === "on_field") {
+            onTeamWithdrawn(teamId);
+          }
+        } else if (action === "check_transition") {
+          // WarmingUp -> OnField
+          console.log(`[StakedTeamsList] Starting transition for team ${teamId}: WarmingUp -> OnField`);
+          
+          // Wait for transaction to complete
+          await refreshTeamStatus(teamId);
+          console.log(`[StakedTeamsList] Transaction confirmed for team ${teamId}`);
+          
+          // Small delay to ensure blockchain state is updated
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Only after confirmation, notify dashboard to move team
+          // Team will appear in ON FIELD with "Withdraw" button
+          if (onTeamTransitioned) {
+            console.log(`[StakedTeamsList] Moving team ${teamId} to ON FIELD section`);
+            onTeamTransitioned(teamId);
+          }
+        } else if (action === "complete_withdraw") {
+          // ToWithdraw -> Free
+          // Wait for transaction to complete
+          await refreshTeamStatus(teamId);
+          
+          // Small delay to ensure blockchain state is updated
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Only after confirmation, notify dashboard to move team
+          // Team will return to MY WALLET with "Warm Up" button
+          if (onTeamWithdrawn) {
+            onTeamWithdrawn(teamId);
+          }
         }
-      } else if (action === "check_transition") {
-        // WarmingUp -> OnField
-        await refreshTeamStatus(teamId);
-        if (onTeamTransitioned) {
-          onTeamTransitioned(teamId);
-        }
-      } else if (action === "complete_withdraw") {
-        // ToWithdraw -> Free
-        await refreshTeamStatus(teamId);
-        if (onTeamWithdrawn) {
-          onTeamWithdrawn(teamId);
-        }
+      } catch (error) {
+        console.error("Error in team action:", error);
+        // Don't move team if transaction failed
+        throw error;
       }
     },
     [setTeamStake, refreshTeamStatus, onTeamWithdrawn, onTeamTransitioned, section]

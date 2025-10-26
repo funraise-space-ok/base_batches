@@ -13,6 +13,7 @@ import {
   Zoom,
   Box,
   Skeleton,
+  keyframes,
 } from "@mui/material";
 import {
   CheckCircle,
@@ -21,6 +22,16 @@ import {
   Stadium,
   Stop,
 } from "@mui/icons-material";
+
+// Animation for loading state
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+`;
 import { Card as PlayerCard } from "components/Card";
 import { CardDetails } from "components/CardDetails";
 import { BaseTeam, TeamStateName, useBaseProgram } from "lib/base/useBaseProgram";
@@ -277,6 +288,8 @@ export const TeamRow = React.memo(function TeamRow({
         ...teamData,
         cards,
       });
+      
+      console.log(`[TeamRow] Team ${teamId} loaded with state:`, teamData.state);
     } catch (error) {
       console.error("Error loading team data:", error);
       setTeam(null);
@@ -295,10 +308,20 @@ export const TeamRow = React.memo(function TeamRow({
       try {
         setActionLoading(true);
         await onAction(action, teamId);
-        // Reload team data after action
+        
+        // Wait a bit longer for blockchain to update state
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Force reload team data to get the new state from blockchain
         await loadTeamData();
       } catch (error) {
         console.error("Error in TeamRow handleAction:", error);
+        // If error, reload anyway to ensure consistency
+        try {
+          await loadTeamData();
+        } catch (reloadError) {
+          console.error("Error reloading team data:", reloadError);
+        }
       } finally {
         setActionLoading(false);
       }
@@ -306,11 +329,11 @@ export const TeamRow = React.memo(function TeamRow({
     [onAction, loadTeamData]
   );
 
-  if (loading) {
+  if (loading || actionLoading) {
     return (
       <TableRow>
         <TableCell component="td" scope="row" colSpan={3}>
-          <Stack spacing={1}>
+          <Stack spacing={1} alignItems="center">
             <Stack direction="row" gap={0.5} justifyContent="center">
               {[1, 2, 3, 4, 5].map((i) => (
                 <Skeleton
@@ -318,13 +341,27 @@ export const TeamRow = React.memo(function TeamRow({
                   variant="rectangular"
                   width={54}
                   height={72}
-                  sx={{ borderRadius: 1 }}
+                  sx={{ 
+                    borderRadius: 1, 
+                    animation: `${pulse} 1.5s ease-in-out infinite`,
+                    animationDelay: `${i * 0.1}s`
+                  }}
                 />
               ))}
             </Stack>
-            <Box display="flex" justifyContent="flex-end">
-              <Skeleton variant="rounded" width={130} height={32} />
-            </Box>
+            {actionLoading && (
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+                <CircularProgress size={16} />
+                <Typography variant="caption" color="text.secondary">
+                  Procesando transacción...
+                </Typography>
+              </Stack>
+            )}
+            {!actionLoading && (
+              <Box display="flex" justifyContent="flex-end">
+                <Skeleton variant="rounded" width={130} height={32} />
+              </Box>
+            )}
           </Stack>
         </TableCell>
       </TableRow>
