@@ -34,6 +34,7 @@ export interface BaseTeam {
   playerIds?: number[];
   termsAccepted?: boolean;
   pricePaidWei?: bigint;
+  transitionTimestamp?: number;
 }
 
 export interface BasePlayer {
@@ -224,6 +225,7 @@ function mapTeamDetail(raw: RawTeamDetailArray | RawTeamDetailObject): BaseTeam 
     playerIds: Array.from(playerIds, Number),
     termsAccepted,
     pricePaidWei,
+    transitionTimestamp: Number(transitionTimestamp),
   };
 }
 
@@ -508,6 +510,52 @@ export function useBaseProgram() {
     [contractAddress, getTeamDetail, packPrices, publicClient, walletClient],
   );
 
+  const refreshTeamStatus = useCallback(
+    async (teamId: number) => {
+      if (!walletClient || !publicClient || !contractAddress) {
+        throw new Error("Wallet not ready");
+      }
+
+      try {
+        setLoading(true);
+        const hash = await walletClient.writeContract({
+          abi: sportsAbi,
+          address: contractAddress,
+          functionName: "refreshTeamStatus",
+          args: [BigInt(teamId)],
+        });
+
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        if (receipt.status !== "success") {
+          throw new Error(`Refresh transaction reverted (${receipt.transactionHash})`);
+        }
+        setError(null);
+      } catch (err: any) {
+        console.error("Error refreshing team status", err);
+        setError(err?.shortMessage ?? err?.message ?? "Failed to refresh team status");
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [contractAddress, publicClient, walletClient],
+  );
+
+  const getTimeLockSeconds = useCallback(async (): Promise<number> => {
+    if (!publicClient || !contractAddress) return 0;
+    try {
+      const timeLock = (await publicClient.readContract({
+        abi: sportsAbi,
+        address: contractAddress,
+        functionName: "timeLockSeconds",
+      })) as bigint;
+      return Number(timeLock);
+    } catch (err) {
+      console.error("Error fetching timeLockSeconds", err);
+      return 0;
+    }
+  }, [contractAddress, publicClient]);
+
   return {
     contractAddress,
     loading,
@@ -522,6 +570,8 @@ export function useBaseProgram() {
     getTeamById,
     getTeamDetail,
     getPlayersByIds,
+    refreshTeamStatus,
+    getTimeLockSeconds,
     labels: TIER_LABELS,
   };
 }

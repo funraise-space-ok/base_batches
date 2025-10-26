@@ -1,0 +1,2 @@
+export { UserTeamsList } from "./UserTeamsList";
+

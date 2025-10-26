@@ -1,5 +1,4 @@
-import { Container } from "@mui/material";
-import { BuyPacksAlert } from "components/BuyPacksAlert";
+import { Box } from "@mui/material";
 
 export default function DashboardLayout({
   children,
@@ -7,9 +6,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Container sx={{ mt: 20 }}>
-      <BuyPacksAlert />
+    <Box sx={{ mt: 12 }}>
       {children}
-    </Container>
+    </Box>
   );
 }
