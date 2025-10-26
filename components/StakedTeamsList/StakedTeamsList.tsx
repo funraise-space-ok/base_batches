@@ -64,6 +64,13 @@ export function StakedTeamsList({
           // Wait for transaction to complete
           await refreshTeamStatus(teamId);
           
+          // Play on field sound
+          try {
+            const onFieldAudio = new Audio('/audio/enter_the_field.wav');
+            onFieldAudio.volume = 1.0;
+            onFieldAudio.play().catch(() => {});
+          } catch {}
+          
           // Small delay to ensure blockchain state is updated
           await new Promise(resolve => setTimeout(resolve, 1000));
           

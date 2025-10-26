@@ -69,6 +69,13 @@ export function UserTeamsList({
           // Wait for transaction to complete
           await setTeamStake(teamId, true);
           
+          // Play warm up sound
+          try {
+            const warmupAudio = new Audio('/audio/enter_the_field.mp3');
+            warmupAudio.volume = 1.0;
+            warmupAudio.play().catch(() => {});
+          } catch {}
+          
           // Small delay to ensure blockchain state is updated
           await new Promise(resolve => setTimeout(resolve, 1000));
           
